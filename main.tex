@@ -1,0 +1,450 @@
+% Documentclass und Aspectratio
+\documentclass[10pt,aspectratio=1610]{beamer}
+
+% Beamer options and themes
+\usepackage{pgfpages}
+%\setbeameroption{show notes on second screen=right} 
+\usetheme[progressbar=frametitle]{metropolis}
+\setbeamertemplate{footline}[frame number]
+
+% Biber
+\usepackage{xcoffins}
+
+
+% Used packages
+\usepackage{appendixnumberbeamer}
+\usepackage{booktabs}
+\usepackage{microtype}
+\usepackage[utf8]{inputenc}
+\usepackage{csquotes}
+\usepackage[scale=2]{ccicons}
+\usepackage{svg}
+\usepackage{soul}
+\usepackage{xcolor}
+
+% custom Colors
+\definecolor{vu_blue}{HTML}{0077b3}
+\definecolor{special_gray}{HTML}{252525}
+\definecolor{special_light_gray}{HTML}{A0A0A0}
+\definecolor{vu_orange_red}{HTML}{b33c00}
+\definecolor{darkorange}{HTML}{b33c00}
+% custom Colors
+
+% Listings
+\usepackage{listings}
+\usepackage{xcolor}
+
+% Fancy underlines for text to refer to images
+\definecolor{greenish}{HTML}{9ec69c}
+\newcommand{\ulinegreen}[1]{\setulcolor{greenish}\ul{#1}}
+
+\definecolor{greyish}{HTML}{a1a1a1}
+\newcommand{\ulinegrey}[1]{\setulcolor{greyish}\ul{#1}}
+
+% Basic C style
+\lstdefinestyle{cstyle}{
+    language=C,
+    basicstyle=\ttfamily\footnotesize,
+    keywordstyle=\color{vu_blue}\bfseries,
+    stringstyle=\color{red},
+    commentstyle=\color{gray}\itshape,
+    numberstyle=\tiny\color{darkgray},
+    numbers=none,
+    stepnumber=1,
+    showstringspaces=false,
+    tabsize=4,
+    breaklines=true,
+    breakatwhitespace=false,
+    frame=single,
+    backgroundcolor=\color{white},
+    morekeywords={size_t},
+    literate={0}{{\textcolor{vu_orange_red}{0}}}{1}
+             {1}{{\textcolor{vu_orange_red}{1}}}{1}
+             {2}{{\textcolor{vu_orange_red}{2}}}{1}
+             {3}{{\textcolor{vu_orange_red}{3}}}{1}
+             {4}{{\textcolor{vu_orange_red}{4}}}{1}
+             {5}{{\textcolor{vu_orange_red}{5}}}{1}
+             {6}{{\textcolor{vu_orange_red}{6}}}{1}
+             {7}{{\textcolor{vu_orange_red}{7}}}{1}
+             {8}{{\textcolor{vu_orange_red}{8}}}{1}
+             {9}{{\textcolor{vu_orange_red}{9}}}{1},             
+}
+
+% Assembly style
+\lstdefinestyle{asmstyle}{
+    language=[x86masm]Assembler,
+    basicstyle=\ttfamily\footnotesize,
+    keywordstyle=\color{vu_blue}\bfseries,
+    stringstyle=\color{red},
+    commentstyle=\color{gray}\itshape,
+    numberstyle=\tiny\color{darkgray},
+    numbers=none,
+    stepnumber=1,
+    showstringspaces=false,
+    tabsize=4,
+    breaklines=true,
+    breakatwhitespace=false,
+    frame=single,
+    backgroundcolor=\color{white},
+    morekeywords={mov, add, sub, mul, div, push, pop, call, ret, jmp, cmp, test, and, or, xor, not, shr, shl, inc, dec, lea, nop, movabs, cmovne}, % instructions
+    morekeywords=[2]{rdx, rip, rbp, rax, r12, r13, r14, r15, rbx, rcx, rsp}, % registers
+    keywordstyle=[2]\color{vu_orange_red}\bfseries,
+}
+
+% microcode style
+\lstdefinestyle{uCode}{
+    language=C,
+    basicstyle=\ttfamily\footnotesize,
+    keywordstyle=\color{vu_blue}\bfseries,
+    stringstyle=\color{red},
+    commentstyle=\color{gray}\itshape,
+    numberstyle=\tiny\color{darkgray},
+    numbers=none,
+    stepnumber=1,
+    showstringspaces=false,
+    tabsize=4,
+    breaklines=true,
+    breakatwhitespace=false,
+    frame=single,
+    backgroundcolor=\color{white},
+    morekeywords={LDZX_DSZ64_ASZ32_SC1_DR, SUB_DSZ64_DRR, UJMPCC_DIRECT_NOTTAKEN_CONDZ_RI, END_SEQWORD, NOP},   % ucode instructions
+    morekeywords=[2]{TMP4, TMP5, RDI, TMP6}, % ucode registers
+    keywordstyle=[2]\color{vu_orange_red}\bfseries,
+    morekeywords=[3]{END_SEQWORD}
+}
+
+% Coffin dark magic for overlays
+\NewCoffin \CenteredCoffin
+\ExplSyntaxOn
+\NewDocumentCommand \GlobalSetHorizontalCoffin { m +m } {
+    \hcoffin_gset:Nn{#1}{#2}
+}
+\NewDocumentCommand \GlobalClearCoffin { m } {
+    \coffin_gclear:N{#1}
+}
+\ExplSyntaxOff
+\AtBeginShipout{%
+    \AtBeginShipoutUpperLeftForeground{
+        \TypesetCoffin\CenteredCoffin[hc,vc](.5\pdfpagewidth,-.5\pdfpageheight)
+        \GlobalClearCoffin\CenteredCoffin
+    }
+}
+
+
+% Thickness of Progressbar (dummy thicc)
+\makeatletter
+\setlength{\metropolis@titleseparator@linewidth}{1.5pt}
+\setlength{\metropolis@progressonsectionpage@linewidth}{1.5pt}
+\setlength{\metropolis@progressinheadfoot@linewidth}{1.5pt}
+\makeatother
+
+\usepackage{xspace}
+\newcommand{\themename}{\textbf{\textsc{metropolis}}\xspace}
+
+\title[XM\_0123]{Thesis Title}
+%\subtitle{Author Name}
+\date{01.01.1970}
+\author{Author Name}
+\institute{Supervisor: Dr. Doctor \\ \\ VU Amsterdam - CSec}
+\titlegraphic{\vspace{4.25cm}\hfill\includesvg[height=1cm]{images/VU-logo-nobg.svg}}
+
+\begin{document}
+
+% Set Colors
+\setbeamercolor{frametitle}{bg=vu_blue, fg=white}
+\setbeamercolor{normal text}{fg=special_gray}
+\setbeamercolor{example text}{fg=special_gray}
+\usebeamercolor[fg]{normal text}
+\setbeamercolor{progress bar in head/foot}{fg=vu_orange_red}
+\setbeamercolor{progress bar in section page}{fg=vu_orange_red}
+\setbeamercolor{title separator}{fg=special_light_gray}
+% Set Colors
+
+\logo{\vspace{-0.6cm}\includesvg[height=0.5cm]{images/VU-logo-nobg.svg}\hspace{0.855\paperwidth}}
+
+\maketitle
+
+\begin{frame}[fragile]{My thesis in two sentences}
+    Main contributions:
+    \begin{itemize}
+        \item First Sentence
+        \item Second Sentence
+    \end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]{Slide with image}
+    This is a text
+    \begin{itemize}
+        \item Bulletpoint 1
+        \item Bulletpoint 2
+        \item Bulletpoint 3
+    \end{itemize}
+    \begin{figure}
+        \centering
+        \includegraphics[width=0.3\textwidth]{example-image-a}
+        \label{fig:fig_1}
+    \end{figure}
+\end{frame}
+
+\begin{frame}[fragile]{General Slide with code}
+    \begin{center}
+            This is a text
+    \end{center}
+
+    \begin{columns}
+        \begin{column}{0.50\textwidth}
+\begin{lstlisting}[style=cstyle]
+#include <stdio.h>
+
+void c_function1(void) {
+	printf("This is a function.\n");
+}
+\end{lstlisting}
+        \end{column}
+    
+        \begin{column}{0.50\textwidth}
+\begin{lstlisting}[style=cstyle]
+#include <stdio.h>
+
+void c_function2(void) {
+	printf("This is a function.\n");
+}
+\end{lstlisting}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}[fragile]{}
+    \section{Separator slide}
+\end{frame}
+
+\begin{frame}[fragile]{Slide with underlined text}
+    \begin{columns}
+        \begin{column}{0.55\textwidth}
+            This is underlined \ulinegreen{green}
+            \begin{itemize}
+                \item Bulletpoint 1
+                \item Bulletpoint 2
+            \end{itemize}
+
+            \vspace{0.5cm}
+            This is underlined \ulinegrey{grey}
+            \begin{itemize}
+                \item Bulletpoint 1
+                \item Bulletpoint 2
+            \end{itemize}
+        \end{column}
+
+        \begin{column}{0.45\textwidth}
+            \begin{figure}
+                \centering
+                \includegraphics[width=0.8\textwidth]{example-image-b}
+                \label{fig:fig_2}
+            \end{figure}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+
+\begin{frame}[fragile]{}
+    \section{Separator slide}
+\end{frame}
+
+\begin{frame}[fragile]{Slide with tikz drawing}
+\tikzstyle{prep} = [rectangle, rounded corners, minimum width=\linewidth-7cm, minimum height=0.65cm, text centered, draw=black, fill=cyan!30]
+\tikzstyle{process} = [rectangle, rounded corners, minimum width=\linewidth-7cm, minimum height=0.65cm, text centered, draw=black, fill=gray!30]
+\tikzstyle{open} = [rectangle, rounded corners, minimum width=\linewidth-6cm, minimum height=0.65cm, text centered, draw=black, fill=red!30]
+\tikzstyle{spec} = [rectangle, rounded corners, minimum width=\linewidth-8cm, minimum height=0.65cm, text centered, draw=black, fill=red!20]
+\tikzstyle{decision} = [rectangle, rounded corners, minimum width=\linewidth-8cm, minimum height=0.65cm, text centered, draw=black, fill=orange!20]
+\tikzstyle{win} = [rectangle, rounded corners, minimum width=\linewidth-8cm, minimum height=0.65cm, text centered, draw=black, fill=green!20]
+\tikzstyle{arrow} = [thick,->,>=stealth]
+\begin{figure}[h]
+	\centering
+	\begin{tikzpicture}[node distance=1.1cm]
+		% Nodes
+		%\node (box1) [process] {Fuzz target program};
+		\node (box2) [process] {Mond};
+		\node (box3) [open, below of=box2] {Bober};
+		\node (box4) [spec, below of=box3] {Procione};
+		\node (box5) [spec, below of=box4] {Word};
+		\node (box6) [decision, below of=box5] {Text};
+		\node (box7) [win, below of=box6] {Lizard};
+		\node (box8) [open, below of=box7] {Montagne};
+
+		% Arrows
+		%\draw [arrow] (box1) -- (box2);
+		\draw [arrow] (box2) -- (box3);
+
+		% Speculation arrows
+		\draw [arrow, dotted, color=black!60] (box3) -- (box4);
+		\draw [arrow, dotted, color=black!60] (box4) -- (box5);
+		\draw [arrow, dotted, color=black!60] (box5) -- (box6);
+		\draw [arrow, dotted, color=black!60] (box6.east) -- ++(+0.5cm,0) node[anchor=north, pos=0.5]{Yes} |- (box7);
+		\draw [arrow, dotted, color=black!60] (box6.west) -- ++(-0.5cm,0) node[anchor=north, pos=0.5]{No} |- (box4);
+
+		% Speculation box
+		\draw [dashed, color=red!30, thick] (box3.south east) ++(0,0) -- (box8.north east);
+		\draw [dashed, color=red!30, thick] (box3.south west) ++(0,0) -- (box8.north west);
+	\end{tikzpicture}
+	\label{fig:s_overview_diagram}
+\end{figure}
+\end{frame}
+
+\begin{frame}[fragile]{Slide with assembly}
+    \begin{lstlisting}[style=asmstyle]
+_start:
+    int 0x80                    ; Interrupt goes brrrrr
+    \end{lstlisting}
+\end{frame}
+
+\begin{frame}[fragile]{Slide containing one picture}
+\begin{figure}
+    \centering
+    \includegraphics[height=0.5\paperwidth]{example-image-c}
+\end{figure}
+\end{frame}
+
+\begin{frame}[fragile]{Slide with tables}
+    \begin{columns}
+        \begin{column}{0.5\textwidth}
+            \begin{table}[h!]
+                \centering
+                \caption{Table}
+                \begin{tabular}{|l|c|}
+                    \hline
+                    \textbf{Value 1} & \textbf{Value 2}\\
+                    \hline
+                    0x2a & 4242424242 \\
+                    \hline
+                    0x42 & 0o52 \\
+                    \hline
+                \end{tabular}
+            \end{table}
+        \end{column}
+
+        \begin{column}{0.5\textwidth}
+            \begin{table}[h!]
+                \centering
+                \caption{Table}
+                \begin{tabular}{|l|c|}
+                    \hline
+                    \textbf{Value 1} & \textbf{Value 2}\\
+                    \hline
+                    0x2a & 42 \\
+                    \hline
+                    0x4242424242 & 0o52 \\
+                    \hline
+                \end{tabular}
+            \end{table}
+        \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}[fragile]{Slide with microcode}
+\begin{center}
+    CISC CPUs are so bad, they actually use RISC instructions internally
+\end{center}
+\begin{lstlisting}[style=uCode]
+/*
+  Assumptions:
+  - TMP6 contains value 0x2a
+  - TMP4 contains value 42
+*/
+{
+	LDZX_DSZ64_ASZ32_SC1_DR(TMP5, TMP4),
+	SUB_DSZ64_DRR(TMP5, TMP6, TMP5),
+	UJMPCC_DIRECT_NOTTAKEN_CONDZ_RI(TMP5, jump),
+	END_SEQWORD
+},
+{
+jump:
+	DO_BONKY_MANEUVER(),
+	NOP,
+	NOP,
+	END_SEQWORD
+}
+\end{lstlisting}
+\end{frame}
+
+\begin{frame}[fragile]{Slide with table and assembly listing}
+    \begin{columns}
+        \begin{column}{0.35\textwidth}
+\begin{table}[h!]
+    \centering
+    \begin{tabular}{|l|r|}
+        \hline
+        \textbf{Farbe} & \textbf{Constellation}\\
+        \hline
+        0x4192529 & 124214\\
+        \hline
+        0x8f8dd828 & 213303\\
+        \hline
+        0x555a5a5a & 4343\\
+        \hline
+        0x7ffff7de & 42\\
+        \hline              
+    \end{tabular}
+\end{table}
+        \end{column}
+
+        \begin{column}{0.625\textwidth}
+\begin{lstlisting}[
+    style=asmstyle,
+    ]
+  00000000004011c7 <otter>:
+    [...]
+    4011e3:       cmp    %rax,%rdx
+    4011e6:       jae    401227 <vertigo>
+    4011e8:       mov    -0x10(%rbp),%rax
+    4011ec:       mov    (%rax),%rax
+    4011ef:       lea    0x0(,%rax,8),%rdx
+    4011f7:       lea    0x2e82(%rip),%rax
+    4011fe:       mov    (%rdx,%rax,1),%rax
+    [...]
+    40121d:       cmp    %r13,%rax
+    401220:       cmovne %r14,%r15
+    401224:       jmp    *%r15
+  
+  0000000000401227 <vertigo>:
+    401227:       nop      
+    401228:       mov    -0x8(%rbp),%r12
+    40122c:       leave           
+    40122d:       ret   
+\end{lstlisting}
+        \end{column}
+    \begin{column}{0.025\textwidth}
+    \end{column}
+    \end{columns}
+\end{frame}
+
+\begin{frame}[fragile]{}
+    \section{Questions and Notes?}
+\end{frame}
+
+%%% Reset slide counter | Start Appendix and backup slides
+\newcounter{finalframe}
+\setcounter{finalframe}{\value{framenumber}}
+
+\appendix
+
+\begin{frame}[fragile]{Slide with coffin overlay}
+
+This text contains a very wrong statement and should be marked thus
+
+\GlobalSetHorizontalCoffin \CenteredCoffin {%
+    \pause
+    \begin{figure}
+        \centering
+        \includesvg[width=0.2\linewidth]{images/Red_X.svg}
+    \end{figure}
+    \onslide<1->% Reset things, so the following content isn't paused
+}
+\end{frame}
+
+%%% End of Appendix Counter
+\setcounter{framenumber}{\value{finalframe}}
+%\appendix
+
+
+
+\end{document}
